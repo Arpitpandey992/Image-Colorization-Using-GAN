@@ -237,11 +237,43 @@ Estimated Total Size (MB): 1031.02
 Thus, as we can see, the input to the discriminator is of shape `16x3x256x256` and output is of shape `16x1x30x30`.\
 The output is basically a 30x30 matrix which is obtained after dividing the input image into 900 patches, which contains the predictions corresponding to each patch.
 ### Step 5. Defining Helper Functions
+Here, i defined the following extra functions:
+* `ShowSamples()`\
+Used for showing and saving some samples while training the model. it takes a random batch from the input dataloades and passes it through the generator to get it's colorized predictions.
+
+* `VisualizeLoss()`\
+Used to plot the loss values w.r.t iterations performed during the training phase.
 ### Step 6. Initializing The Model
+The model hyperparameters are initialized here, along with functions for loading and saving checkpoints during training phase.
+In each checkpoint, i am saving the state dictionary of generator, discriminator, their optimizers. I am also saving the number of epochs along with the loss values obtained thus far.
+Also, while initializing the models, i am using Mixed Precision Training to (hopefully) speed up the training process.
 ### Step 7. Training
+I performed forward propagation for a total of ~650 epochs. While training, i saved the loss values and some predictions on validation data.\
+The training process was as follows:
+* For the first ~50 epochs, i used google collab but it was very difficult to work with because it constantly disconnects, and the GPU use time is very limited. Therefore, i switched to kaggle instead.
+* After that, the model was trained till ~350 epochs by taking breaks in between.
+* As the loss was saturating at this point, i introduced random horizontal flips in the input datasets. This point is characterized by the sudden increase in generator loss near ~1,50,000 Iterations.
+* Now, the model was trained till ~650 epochs.
+* The loss nearly saturated again but this time, the average generator loss was higher than the loss observed at 350 epochs, when i started training again with random horizontal flips. It might possibly go down if i train further however.
+
+The Model Checkpoints could be found in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params>My Model Checkpoints</a>.\
+The checkpoints till epoch 350 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/4>Version 4</a>\
+The checkpoints till epoch 650 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/6>Version 6</a>
+
 ### Step 8. Visualizing Loss Trajectory
+#### Generator Loss:
+After 350 Epochs:
+![](ReadmeData/Losses/Generator_Loss_After_Epoch_350.png)
+After 650 Epochs:
+![](ReadmeData/Losses/Generator_Loss_After_Epoch_650.png)
+#### Discriminator Loss:
+After 350 Epochs:
+![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_350.png)
+After 650 Epochs:
+![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_650.png)
 ### Step 9. Visualizing Predictions
 
 ## Conclusion
+The loss
 
 ## How to replicate on your device
