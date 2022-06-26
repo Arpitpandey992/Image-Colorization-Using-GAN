@@ -67,16 +67,16 @@ The dataset is defined in the following directory structure:
                 └── *.jpg (10,000 images in total)
 </pre>
 ## Dependencies:
-|     **Name**     |    **pip install Command**   |
-|:----------------:|:----------------------------:|
-|     **Numpy**    |     **pip install numpy**    |
-|  **Matplotlib**  |  **pip install matplotlib**  |
-|     **torch**    |     **pip install torch**    |
-|  **torchvision** |  **pip install torchvision** |
-|     **glob**     |     **pip install glob2**    |
-|    **Pillow**    |    **pip install Pillow**    |
-| **scikit-image** | **pip install scikit-image** |
-|     **tqdm**     |     **pip install tqdm**     |
+| Name         | pip install Command      |
+|--------------|--------------------------|
+| Numpy        | pip install numpy        |
+| Matplotlib   | pip install matplotlib   |
+| torch        | pip install torch        |
+| torchvision  | pip install torchvision  |
+| glob         | pip install glob2        |
+| Pillow       | pip install Pillow       |
+| scikit-image | pip install scikit-image |
+| tqdm         | pip install tqdm         |
 * Numpy
 * Matplotlib
 * torch
