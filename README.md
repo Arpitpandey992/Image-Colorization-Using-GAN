@@ -1,5 +1,5 @@
 # Image-Colorization-Using-GAN <!-- omit in toc -->
-VLG Summer Open Project Submission 2022
+VLG Summer Open Project Submission 2022, Testing
 
 ## Table of Contents <!-- omit in toc -->
 - [Overview of Project:](#overview-of-project)
