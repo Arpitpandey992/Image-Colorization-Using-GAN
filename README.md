@@ -41,7 +41,7 @@ Therefore, to capture the losses for such complex problems, we require a complex
 
 For a simple GAN, the loss function is defined as:
 
-![](ReadmeData/GAN_Loss.png | width=100)
+<img src="ReadmeData/GAN_Loss.png" height=40/>
 
 Here, we can see that the objective of the Generator (G) is to minimize right term, while the discriminator (D) Maximizes the left term.
 
@@ -49,7 +49,7 @@ In case of a conditional GAN, alongside some random noise "z", we provide condit
 
 Hence, The loss Function becomes:
 
-![](ReadmeData/cGAN_Loss.png)
+<img src="ReadmeData/cGAN_Loss.png" height=40/>
 
 Where, x is the label for input data. For B/W to color task, x is the L channel of image, z is random noise and y is the concatencation of \*a\*b channels).
 
