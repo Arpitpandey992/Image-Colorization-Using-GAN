@@ -33,15 +33,17 @@ Generative Adversarial Networks, or GANs are an approach that's used for unsuper
 
 Instead of going into the in-depth detail of how they work, i'll try to give an intuition around their working.
 
-So, basically, a GAN consists of two 'bots' who compete against each other (hence the adversarial term) where one generates some data, and the other determines whether the generated data is real or fake. Hence, Let's take a simple problem. We ask the generator to generate an image of a tree. Then we take it's output and feed it to the discriminator, which determines whether it's real or fake. Initially, the generator produces random gibberish. But as the process goes on, both the generator and discriminator improves by learning from one another, as both of them are trying to increase the loss of the other, hence learning in the process. The final goal of the generator is to produce outputs that are "indistinguishable from reality". Hence, this forces the discriminator to guess with a probability of 0.5 whether the generated data is real or fake.
-As per my understanding, this works because calculating the loss of a generator using traditional loss functions such as L1 or L2 loss are not sufficient to allow the generator to learn to create realistic results. Take the problem at hand, colorizing black and white images. If we train the generator with an L1 loss function instead of a discriminator, It is observed to produce subpar, blurry results (Source: Pix2Pix Paper).
-Therefore, to capture the losses for such complex problems, we require a complex and variable method to calculate the loss, which is exactly what the discriminator is training for. It is basically training to judge the generator's output, and nothing else.
+So, basically, a GAN consists of two 'bots' who compete against each other (hence the adversarial term) where one generates some data, and the other determines whether the generated data is real or fake.\
+ Well, Let's take a simple problem. We ask the generator to generate an image of a tree. Then we take it's output and feed it to the discriminator, which determines whether it's real or fake. Initially, the generator produces random gibberish. But as the process goes on, both the generator and discriminator improves by learning from one another, as both of them are trying to increase the loss of the other, hence learning in the process. The final goal of the generator is to produce outputs that are "indistinguishable from reality". Hence, this forces the discriminator to guess with a probability of 0.5 whether the generated data is real or fake provided enough training is done and generator starts producing photorealistic outputs.
+
+As per my understanding, this works because calculating the loss of a generator using traditional loss functions such as L1 or L2 loss are not sufficient to make sure the generator learns well enough to be able to create realistic results. Take the problem at hand, colorizing black and white images. If we train the generator with an L1 loss function instead of a discriminator, It is observed to produce subpar, blurry results (Source: Pix2Pix Paper).
+Therefore, to capture the losses for such complex problems, we require a complex and variable method to calculate the loss, which is exactly what the discriminator is training for. It is basically training to judge the generator's output.
 
 For a simple GAN, the loss function is defined as:
 
 $\min_{G}\max_{D}\mathbb{E}_{x}[\log{D(x)}] +  \mathbb{E}_{z}[1 - \log{D(G(z))}]$
 
-Here, we can see that the objective of the Generator (G) is to minimize RHS term, while the discriminator (D) Maximizes the LHS term.
+Here, we can see that the objective of the Generator (G) is to minimize right term, while the discriminator (D) Maximizes the left term.
 
 In case of a conditional GAN, alongside some random noise "z", we provide conditional input "x" to allow the GAN to have some supervision. 
 
@@ -53,9 +55,6 @@ Where, x is the label for input data. For B/W to color task, x is the L channel 
 
 ## Data Description:
 Since the task is simply colorization of black and white images, we don't need any specific labelled data. This allows us to use any image dataset containing various scenes for training. So i am using the COCO image dataset which contains various different images describing different objects and scenes. i used 8000 images for training and 2000 for testing.
-Now, the entire dataset is transformed by 
-* Resizing every image to 256x256 pixels
-* Applying random horizontal flip (added after training for 350 epochs to see if results improve or not).
 
 The dataset is defined in the following directory structure:
 <pre>
@@ -66,27 +65,182 @@ The dataset is defined in the following directory structure:
             └── train_sample
                 └── *.jpg (10,000 images in total)
 </pre>
+
 ## Dependencies:
-| Name         | pip install Command      |
-|--------------|--------------------------|
-| Numpy        | pip install numpy        |
-| Matplotlib   | pip install matplotlib   |
-| torch        | pip install torch        |
-| torchvision  | pip install torchvision  |
-| glob         | pip install glob2        |
-| Pillow       | pip install Pillow       |
-| scikit-image | pip install scikit-image |
-| tqdm         | pip install tqdm         |
-* Numpy
-* Matplotlib
-* torch
-* torchvision
-* PIL
-* os module of python
-* tqdm
-* shutil
+|   **Name**  |   **pip install Command**  |
+|:-----------:|:--------------------------:|
+|    Numpy    |     `pip install numpy`    |
+|  Matplotlib |  `pip install matplotlib`  |
+|    Torch    |     `pip install torch`    |
+| Torchvision |  `pip install torchvision` |
+|     Glob    |     `pip install glob2`    |
+|     PIL     |    `pip install Pillow`    |
+|   Skimage   | `pip install scikit-image` |
+|     tqdm    |     `pip install tqdm`     |
+|    fastai   |    `pip install fastai`    |
 
 ## Steps Followed
+
+### Step 1. Importing Necessary Libraries
+Getting all the required python libraries required for the implementation of the project, then defining the device to be used for calculations.
+
+### Step 2. Fetching The Dataset and Setting Up Input Paths
+Fetching the dataset using fastai (After installing and importing the module).Before defining training and validation paths, i am setting a seed of 123 to make sure that the fetched images are the same throughout different training sessions. Now, from that dataset, we fetch 10,000 images randomly using fastai.\
+Then, these images are split randomly with 8,000 images to be used as training samples and 2,000 images for validation purpose.
+
+Preview of the dataset:\
+`['/root/.fastai/data/coco_sample/train_sample/000000051555.jpg'`\
+ `'/root/.fastai/data/coco_sample/train_sample/000000533484.jpg'`\
+ `'/root/.fastai/data/coco_sample/train_sample/000000134294.jpg'`\
+ `...`\
+ `'/root/.fastai/data/coco_sample/train_sample/000000128837.jpg'`\
+ `'/root/.fastai/data/coco_sample/train_sample/000000164093.jpg'`\
+ `'/root/.fastai/data/coco_sample/train_sample/000000333095.jpg']`
+![](ReadmeData/InputPreview.png)
+### Step 3. Defining Train and Test DataLoaders
+Now the train dataset has 8000 images which can not be fed in one go. Therefore i define training and testing <a href="https://pytorch.org/tutorials/beginner/basics/data_tutorial.html">Dataloaders</a> with a batch size of 16 and 4 workers.\
+Inside the dataloders, several preprocessing is done. the images are:
+* Resized to 256x256 resolution
+* Applying random horizontal flip (added after training for 350 epochs to see if results improve or not).
+* Converted to L\*a\*b image space and values are normalized. 
+* Now, these are split into `L_array and ab_array` having dimensions `1x256x256, 2x256x256` respectively.
+Therefore, for a random element of train loader, we have:\
+`L Array Shape : torch.Size([16, 1, 256, 256]) `\
+`*a*b Array Shape : torch.Size([16, 2, 256, 256])`\
+where, 16 is the batch size.
+![](ReadmeData/DataLoader_Preview.png)
+### Step 4. Modeling the Conditional GAN
+#### 4.1 Modelling the Generator
+Now comes the actual modelling part. i designed the generator according to what what defined in the pix2pix paper. So the generator is basically a U-Net with skip connections. It's architecture is as follows:
+![](ReadmeData/GeneratorArchitecture.png)
+It has an encoding path and a decoding path. The architecture is difficult to code in one `class Generator(nn.Module)`. So I defined another `class GenBlock(nn.Module)` before hand as the U-NET uses many similar components over and over again.This helps in making the code concise and simple to read.\
+The overall Generator summary is given below:
+<pre>
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+             Input-0          [16, 1, 256, 256]               0
+            Conv2d-1         [16, 64, 128, 128]           1,024
+         LeakyReLU-2         [16, 64, 128, 128]               0
+         Gen_Block-3         [16, 64, 128, 128]               0
+            Conv2d-4          [16, 128, 64, 64]         131,072
+       BatchNorm2d-5          [16, 128, 64, 64]             256
+         LeakyReLU-6          [16, 128, 64, 64]               0
+         Gen_Block-7          [16, 128, 64, 64]               0
+            Conv2d-8          [16, 256, 32, 32]         524,288
+       BatchNorm2d-9          [16, 256, 32, 32]             512
+        LeakyReLU-10          [16, 256, 32, 32]               0
+        Gen_Block-11          [16, 256, 32, 32]               0
+           Conv2d-12          [16, 512, 16, 16]       2,097,152
+      BatchNorm2d-13          [16, 512, 16, 16]           1,024
+        LeakyReLU-14          [16, 512, 16, 16]               0
+        Gen_Block-15          [16, 512, 16, 16]               0
+           Conv2d-16            [16, 512, 8, 8]       4,194,304
+      BatchNorm2d-17            [16, 512, 8, 8]           1,024
+        LeakyReLU-18            [16, 512, 8, 8]               0
+        Gen_Block-19            [16, 512, 8, 8]               0
+           Conv2d-20            [16, 512, 4, 4]       4,194,304
+      BatchNorm2d-21            [16, 512, 4, 4]           1,024
+        LeakyReLU-22            [16, 512, 4, 4]               0
+        Gen_Block-23            [16, 512, 4, 4]               0
+           Conv2d-24            [16, 512, 2, 2]       4,194,304
+      BatchNorm2d-25            [16, 512, 2, 2]           1,024
+        LeakyReLU-26            [16, 512, 2, 2]               0
+        Gen_Block-27            [16, 512, 2, 2]               0
+           Conv2d-28            [16, 512, 1, 1]       4,194,304
+        LeakyReLU-29            [16, 512, 1, 1]               0
+  ConvTranspose2d-30            [16, 512, 2, 2]       4,194,304
+      BatchNorm2d-31            [16, 512, 2, 2]           1,024
+          Dropout-32            [16, 512, 2, 2]               0
+             ReLU-33            [16, 512, 2, 2]               0
+        Gen_Block-34            [16, 512, 2, 2]               0
+  ConvTranspose2d-35            [16, 512, 4, 4]       8,388,608
+      BatchNorm2d-36            [16, 512, 4, 4]           1,024
+          Dropout-37            [16, 512, 4, 4]               0
+             ReLU-38            [16, 512, 4, 4]               0
+        Gen_Block-39            [16, 512, 4, 4]               0
+  ConvTranspose2d-40            [16, 512, 8, 8]       8,388,608
+      BatchNorm2d-41            [16, 512, 8, 8]           1,024
+          Dropout-42            [16, 512, 8, 8]               0
+             ReLU-43            [16, 512, 8, 8]               0
+        Gen_Block-44            [16, 512, 8, 8]               0
+  ConvTranspose2d-45          [16, 512, 16, 16]       8,388,608
+      BatchNorm2d-46          [16, 512, 16, 16]           1,024
+             ReLU-47          [16, 512, 16, 16]               0
+        Gen_Block-48          [16, 512, 16, 16]               0
+  ConvTranspose2d-49          [16, 256, 32, 32]       4,194,304
+      BatchNorm2d-50          [16, 256, 32, 32]             512
+             ReLU-51          [16, 256, 32, 32]               0
+        Gen_Block-52          [16, 256, 32, 32]               0
+  ConvTranspose2d-53          [16, 128, 64, 64]       1,048,576
+      BatchNorm2d-54          [16, 128, 64, 64]             256
+             ReLU-55          [16, 128, 64, 64]               0
+        Gen_Block-56          [16, 128, 64, 64]               0
+  ConvTranspose2d-57         [16, 64, 128, 128]         262,144
+      BatchNorm2d-58         [16, 64, 128, 128]             128
+             ReLU-59         [16, 64, 128, 128]               0
+        Gen_Block-60         [16, 64, 128, 128]               0
+  ConvTranspose2d-61          [16, 2, 256, 256]           4,096
+             Tanh-62          [16, 2, 256, 256]               0
+================================================================
+Total params: 54,409,856
+Trainable params: 54,409,856
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 4.00
+Forward/backward pass size (MB): 1871.38
+Params size (MB): 207.56
+Estimated Total Size (MB): 2082.93
+----------------------------------------------------------------
+</pre>
+Thus, as we can see, the input to the model is of shape `16x1x256x256` and output is of shape `16x2x256x256`.
+#### 4.2 Modelling the Discriminator
+The discriminator is usually a simple model which outputs a scalar value between 0 and 1 which is prediction score as to whether the input image is real or fake. But here, according to the pix2pix paper, it is better to use a PatchGAN instead, which penalizes structure at the scale of patches.\
+This is advantageous because a smaller
+PatchGAN has fewer parameters, runs faster, and can be
+applied to arbitrarily large images.
+
+The overall summary of the discriminator is given below:
+<pre>
+----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+             Input-0          [16, 3, 256, 256]               0
+            Conv2d-1         [16, 64, 128, 128]           3,136
+         LeakyReLU-2         [16, 64, 128, 128]               0
+         DiscBlock-3         [16, 64, 128, 128]               0
+            Conv2d-4          [16, 128, 64, 64]         131,072
+       BatchNorm2d-5          [16, 128, 64, 64]             256
+         LeakyReLU-6          [16, 128, 64, 64]               0
+         DiscBlock-7          [16, 128, 64, 64]               0
+            Conv2d-8          [16, 256, 32, 32]         524,288
+       BatchNorm2d-9          [16, 256, 32, 32]             512
+        LeakyReLU-10          [16, 256, 32, 32]               0
+        DiscBlock-11          [16, 256, 32, 32]               0
+           Conv2d-12          [16, 512, 31, 31]       2,097,152
+      BatchNorm2d-13          [16, 512, 31, 31]           1,024
+        LeakyReLU-14          [16, 512, 31, 31]               0
+        DiscBlock-15          [16, 512, 31, 31]               0
+           Conv2d-16            [16, 1, 30, 30]           8,193
+        DiscBlock-17            [16, 1, 30, 30]               0
+================================================================
+Total params: 2,765,633
+Trainable params: 2,765,633
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 12.00
+Forward/backward pass size (MB): 1008.47
+Params size (MB): 10.55
+Estimated Total Size (MB): 1031.02
+----------------------------------------------------------------
+</pre>
+Thus, as we can see, the input to the discriminator is of shape `16x3x256x256` and output is of shape `16x1x30x30`.\
+The output is basically a 30x30 matrix which is obtained after dividing the input image into 900 patches, which contains the predictions corresponding to each patch.
+### Step 5. Defining Helper Functions
+### Step 6. Initializing The Model
+### Step 7. Training
+### Step 8. Visualizing Loss Trajectory
+### Step 9. Visualizing Predictions
 
 ## Conclusion
 
