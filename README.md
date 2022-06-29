@@ -40,7 +40,7 @@ VLG Summer Open Project Submission 2022 IITR
 - [Conclusion](#conclusion)
 - [How to replicate on your device](#how-to-replicate-on-your-device)
 
-## Overview of Project:
+## Overview of Project
 
 Colorizing black and white images has always been a difficult task which required a lot of human input and hardcoding. But this gruesome task could be automated with the use of an end-to-end deep learning pipeline. The network can take a black and white image as an input, then produce a fully colored image as output.
 Therefore, the final goal of this project is to colorize black and white images with the help of Conditional Generative Adversarial Networks (or CGANs). 
