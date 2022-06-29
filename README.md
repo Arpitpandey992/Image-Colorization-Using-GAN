@@ -1,4 +1,9 @@
+<p align="center"><img width="100%" src="ReadmeData/FrontLogo.svg" /></p>
+
+--------------------------------------------------------------------------------
+
 # Image-Colorization-Using-GAN <!-- omit in toc -->
+
 VLG Summer Open Project Submission 2022
 
 ## Table of Contents <!-- omit in toc -->
