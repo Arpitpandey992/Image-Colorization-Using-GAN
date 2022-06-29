@@ -13,12 +13,12 @@
 VLG Summer Open Project Submission 2022 IITR
 
 ## Table of Contents <!-- omit in toc -->
-- [Overview of Project:](#overview-of-project)
+- [Overview of Project](#overview-of-project)
 - [Prerequisite Theory](#prerequisite-theory)
   - [Image Spaces](#image-spaces)
   - [Generative Adversarial Networks](#generative-adversarial-networks)
-- [Data Description:](#data-description)
-- [Dependencies:](#dependencies)
+- [Data Description](#data-description)
+- [Dependencies](#dependencies)
 - [Steps Followed](#steps-followed)
   - [Step 1. Importing Necessary Libraries](#step-1-importing-necessary-libraries)
   - [Step 2. Fetching The Dataset and Setting Up Input Paths](#step-2-fetching-the-dataset-and-setting-up-input-paths)
@@ -30,10 +30,10 @@ VLG Summer Open Project Submission 2022 IITR
   - [Step 6. Initializing The Model](#step-6-initializing-the-model)
   - [Step 7. Training](#step-7-training)
   - [Step 8. Visualizing Loss Trajectory](#step-8-visualizing-loss-trajectory)
-    - [Generator Loss:](#generator-loss)
-    - [Discriminator Loss:](#discriminator-loss)
-    - [Average Generator Loss (Window size of 100):](#average-generator-loss-window-size-of-100)
-    - [Average Discriminator Loss (Window size of 1000):](#average-discriminator-loss-window-size-of-1000)
+    - [Generator Loss](#generator-loss)
+    - [Discriminator Loss](#discriminator-loss)
+    - [Average Generator Loss (Window size of 100)](#average-generator-loss-window-size-of-100)
+    - [Average Discriminator Loss (Window size of 1000)](#average-discriminator-loss-window-size-of-1000)
   - [Step 9. Visualizing Predictions](#step-9-visualizing-predictions)
     - [Predictions on Training Data:](#predictions-on-training-data)
     - [Predictions on Validation Set:](#predictions-on-validation-set)
@@ -89,7 +89,7 @@ Hence, The loss Function becomes:
 
 Where, x is the label for input data. For B/W to color task, x is the L channel of image, z is random noise and y is the concatencation of \*a\*b channels).
 
-## Data Description:
+## Data Description
 Since the task is simply colorization of black and white images, we don't need any specific labelled data. This allows us to use any image dataset containing various scenes for training. So i am using the COCO image dataset which contains various different images describing different objects and scenes. i used 8000 images for training and 2000 for testing.
 
 The data is fetched using `fastai` Module. It makes it very easy to fetch and divide the dataset into train and test sets.
@@ -104,7 +104,7 @@ The dataset is defined in the following directory structure:
                 └── *.jpg (10,000 images in total)
 </pre>
 
-## Dependencies:
+## Dependencies
 
 |   **Name**   |   **pip install Command**   |
 | :----------: | :-------------------------: |
@@ -312,16 +312,16 @@ The training process was as follows:
 
 ### Step 8. Visualizing Loss Trajectory
 
-#### Generator Loss:
+#### Generator Loss
 ![](ReadmeData/Losses/Generator_Loss_After_Epoch_950_15%2003%2016.png)
-#### Discriminator Loss:
+#### Discriminator Loss
 ![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_950_15%2000%2007.png)
 
 As we can see, it is very difficult to get any meaningful information out of these accurate graphs. So, it is better to look at average loss values to better understand the trends.
 
-#### Average Generator Loss (Window size of 100):
+#### Average Generator Loss (Window size of 100)
 ![](ReadmeData/Losses/Generator_Average_Loss_After_Epoch_950_WindowSize_100_15%2003%2014.png)
-#### Average Discriminator Loss (Window size of 1000):
+#### Average Discriminator Loss (Window size of 1000)
 ![](ReadmeData/Losses/Discriminator_Average_Loss_After_Epoch_950_WindowSize_1000_15%2001%2018.png)
 
 
