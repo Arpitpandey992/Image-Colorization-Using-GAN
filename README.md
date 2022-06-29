@@ -25,6 +25,7 @@ VLG Summer Open Project Submission 2022
     - [Average Discriminator Loss (Window size of 1000):](#average-discriminator-loss-window-size-of-1000)
   - [Step 9. Visualizing Predictions](#step-9-visualizing-predictions)
     - [Predictions on Training Data:](#predictions-on-training-data)
+    - [Predictions on Validation Set:](#predictions-on-validation-set)
 - [Conclusion](#conclusion)
 - [How to replicate on your device](#how-to-replicate-on-your-device)
 - [References](#references)
@@ -317,14 +318,31 @@ As we can see, it is very difficult to get any meaningful information out of the
 ### Step 9. Visualizing Predictions
 
 #### Predictions on Training Data:
+![](ReadmeData/Predictions/Training%20Set/Results_After_Epoch_950_On_Training_Set_15%3A37%3A26.png)
+![](ReadmeData/Predictions/Training%20Set/Results_After_Epoch_950_On_Training_Set_15%3A37%3A35.png)
+![](ReadmeData/Predictions/Training%20Set/Results_After_Epoch_950_On_Training_Set_15%3A37%3A38.png)
+![](ReadmeData/Predictions/Training%20Set/Results_After_Epoch_950_On_Training_Set_15%3A37%3A56.png)
+![](ReadmeData/Predictions/Training%20Set/Results_After_Epoch_950_On_Training_Set_15%3A38%3A09.png)
 
+As we can see, the predictions on test set are quite accurate, as they should be. But the story changes when we run it on Validation set.
 
+#### Predictions on Validation Set:
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A48%3A51.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A48%3A54.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A49%3A08.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A49%3A36.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A54%3A11.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A50%3A01.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A50%3A08.png)
+![](ReadmeData/Predictions/Validation%20Set/Results_After_Epoch_950_On_Validation_set_15%3A50%3A23.png)
+
+As we can see, the predictions are acceptable but they are far from ideal. They are often washed out and in some instances, the generator is simply unable to color anything meaningful. So, there is definitely some scope of improvement.
 
 ## Conclusion
 From the average loss graphs, we can clearly see how the generator loss reduces, slowly saturating (before 350 epochs), Similarly, the discriminator loss increases alongside, hence proving that the model was indeed learning from the learning data slowly.
 After applying horizontal flips, the generator loss abruptly increases but it again slowly saturates, but this time, the final saturated loss value is relatively higher. This is expected as the model is easily able to overfit on training data if the data is kept the same throughout multiple train sessions.
 
-From the results, we can see that the model is able to give very close predictions when predicting on training data, but the predictions are nowhere near perfect when using validation data. Hence, this model surely works, but it leaves a lot to be desired. 
+From the results, we can see that the model is able to give very close predictions when predicting on training data, but the predictions are nowhere near perfect when using validation data. Hence, this model surely works, but it leaves a lot to be desired. The colors are often washed out, and sometimes we can see color patches in random areas which is very undesirable.
 
 Using pretrained encoders like ResNet18 could increase the accuracy, which is something i am looking to implement in the near future.
 
