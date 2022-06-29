@@ -1,5 +1,5 @@
 # Image-Colorization-Using-GAN <!-- omit in toc -->
-VLG Summer Open Project Submission 2022, Testing what the hell
+VLG Summer Open Project Submission 2022
 
 ## Table of Contents <!-- omit in toc -->
 - [Overview of Project:](#overview-of-project)
@@ -41,6 +41,9 @@ Before moving on to the description of model and results, let's first understand
 Since we are gonna be working with Black and white images, it is better to move the color space to L\*a\*b from RGB. This is because of two reasons:
 * L\*a\*b space requires us to generate only two channels (*a and *b) using the L channel. Compare that with an RGB image, we can see that we are required to generate all three channels. This reduces the complexity of the network, hence reducing the training and testing time drastically.
 * Also, it is easier to work with L\*a\*b images, simply because the input and output are very clearly divided where L is the input and \*a\*b is the output, which could be concatencated to produce the final image. No extra conversions are required, as compared to working with RGB image space.
+
+For Comparison:
+![](ReadmeData/Image%20Channel%20Comparison.jpeg)
 
 Read more on <a href="https://en.wikipedia.org/wiki/CIELAB_color_space">L\*a\*b here</a>
 
@@ -86,17 +89,18 @@ The dataset is defined in the following directory structure:
 
 ## Dependencies:
 
-|  **Name**   |  **pip install Command**   |
-| :---------: | :------------------------: |
-|    Numpy    |    `pip install numpy`     |
-| Matplotlib  |  `pip install matplotlib`  |
-|    Torch    |    `pip install torch`     |
-| Torchvision | `pip install torchvision`  |
-|    Glob     |    `pip install glob2`     |
-|     PIL     |    `pip install Pillow`    |
-|   Skimage   | `pip install scikit-image` |
-|    tqdm     |     `pip install tqdm`     |
-|   fastai    |    `pip install fastai`    |
+|   **Name**   |   **pip install Command**   |
+| :----------: | :-------------------------: |
+|    Numpy     |     `pip install numpy`     |
+|  Matplotlib  |  `pip install matplotlib`   |
+|    Torch     |     `pip install torch`     |
+| Torchvision  |  `pip install torchvision`  |
+|     Glob     |     `pip install glob2`     |
+|     PIL      |    `pip install Pillow`     |
+|   Skimage    | `pip install scikit-image`  |
+|     tqdm     |     `pip install tqdm`      |
+|    fastai    |    `pip install fastai`     |
+| TorchSummary | `pip install torch-summary` |
 
 ## Steps Followed
 
@@ -123,6 +127,7 @@ Inside the dataloders, several preprocessing is done. the images are:
 * Applying random horizontal flip (added after training for 350 epochs to see if results improve or not).
 * Converted to L\*a\*b image space and values are normalized. 
 * Now, these are split into `L_array and ab_array` having dimensions `1x256x256, 2x256x256` respectively.
+I am shuffling both train and validation dataloaders.
 Therefore, for a random element of train loader, we have:\
 `L Array Shape : torch.Size([16, 1, 256, 256]) `\
 `*a*b Array Shape : torch.Size([16, 2, 256, 256])`\
@@ -269,7 +274,7 @@ Used for showing and saving some samples while training the model. it takes a ra
 Used to plot the loss values w.r.t iterations performed during the training phase.
 
 * `VisualizeAvgLoss()`\
-Used to plot average loss values using sliding window technique. This allows us to see the actual change in average loss over time. The accurate, sharp loss plot looks like it contains no information, especially discriminator loss.
+Used to plot average loss values using sliding window technique. This allows us to see how the average loss is changing.The average shows the trend very well. The accurate, sharp loss plot looks like as if it contains no information, especially discriminator loss. So, i used a window size of 100 for discriminator and 1000 for generator to better capture loss trends.
 
 ### Step 6. Initializing The Model
 
@@ -279,12 +284,12 @@ Also, while initializing the models, i am using Mixed Precision Training to (hop
 
 ### Step 7. Training
 
-I performed forward propagation for a total of ~650 epochs. While training, i saved the loss values and some predictions on validation data.\
+I performed forward propagation for a total of ~950 epochs. While training, i saved the loss values and some predictions on validation data.\
 The training process was as follows:
 * For the first ~50 epochs, i used google collab but it was very difficult to work with because it constantly disconnects, and the GPU use time is very limited. Therefore, i switched to kaggle instead.
 * After that, the model was trained till ~350 epochs by taking breaks in between.
-* As the loss was saturating at this point, i introduced random horizontal flips in the input datasets. This point is characterized by the sudden increase in generator loss near ~1,50,000 Iterations.
-* Now, the model was trained till ~650 epochs.
+* As the loss was saturating at this point, i introduced random horizontal flips in the input datasets. This point is characterized by the sudden increase in generator loss near ~1,50,000 Iterations and sudden decrease in discriminator loss.
+* Now, the model was trained till ~950 epochs.
 * The loss nearly saturated again but this time, the average generator loss was higher than the loss observed at 350 epochs, when i started training again with random horizontal flips. It might possibly go down if i train further however.
 
 
@@ -293,12 +298,12 @@ The training process was as follows:
 #### Generator Loss:
 After 350 Epochs:
 ![](ReadmeData/Losses/Generator_Loss_After_Epoch_350.png)
-After 650 Epochs:
+After 800 Epochs:
 ![](ReadmeData/Losses/Generator_Loss_After_Epoch_650.png)
 #### Discriminator Loss:
 After 350 Epochs:
 ![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_350.png)
-After 650 Epochs:
+After 800 Epochs:
 ![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_650.png)
 ### Step 9. Visualizing Predictions
 
@@ -314,8 +319,8 @@ Overall, this was an amazing project, i got to learn a lot while doing it, espec
 ## How to replicate on your device
 First, install all of the libraries mentioned in [Dependencies:](#dependencies). Now after installing, just run the notebook, either locally or on sites like <a href=https://www.kaggle.com>Kaggle</a>, <a href=https://colab.research.google.com>Google Collab</a>, etc.
 
-Make sure that folder paths for retrieving and storing checkpoints are set correctly as i defined them to be used with kaggle, so they may not work when running on any other environment.
+Make sure that folder paths for retrieving and storing checkpoints are set correctly. I defined the folder paths to be used with kaggle, so they may not work when running on any other environment.
 
 Pretrained Weights could be found in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params>My Model Checkpoints</a>.\
 The checkpoints till epoch 350 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/4>Version 4</a>\
-The checkpoints till epoch 650 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/6>Version 6</a>
+The checkpoints till epoch 950 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/8>Version 8</a>
