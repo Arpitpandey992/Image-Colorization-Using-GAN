@@ -152,7 +152,7 @@ where, 16 is the batch size.
 ![](ReadmeData/DataLoader_Preview.png)
 ### Step 4. Modeling the Conditional GAN
 #### 4.1 Modelling the Generator
-Now comes the actual modelling part. i designed the generator according to what what defined in the pix2pix paper. So the generator is basically a U-Net with skip connections. It's architecture is as follows:
+Now comes the actual modelling part. i designed the generator according to what is defined in the pix2pix paper. So the generator is basically a U-Net with skip connections. It's architecture is as follows:
 ![](ReadmeData/GeneratorArchitecture.png)
 It has an encoding path and a decoding path. The architecture is difficult to code in one `class Generator(nn.Module)`. So I defined another `class GenBlock(nn.Module)` before hand as the U-NET uses many similar components over and over again.This helps in making the code concise and simple to read.\
 The overall Generator summary is given below:
@@ -285,13 +285,13 @@ The output is basically a 30x30 matrix which is obtained after dividing the inpu
 
 Here, i defined the following extra functions:
 * `ShowSamples()`\
-Used for showing and saving some samples while training the model. it takes a random batch from the input dataloades and passes it through the generator to get it's colorized predictions.
+Used for showing and saving some samples while training the model. it takes a random batch from the input dataloader and passes it through the generator to get it's colorized predictions.
 
 * `VisualizeLoss()`\
 Used to plot the loss values w.r.t iterations performed during the training phase.
 
 * `VisualizeAvgLoss()`\
-Used to plot average loss values using sliding window technique. This allows us to see how the average loss is changing.The average shows the trend very well. The accurate, sharp loss plot looks like as if it contains no information, especially discriminator loss. So, i used a window size of 1000 for discriminator and 100 for generator to better capture loss trends.
+Used to plot average loss values using sliding window technique. This allows us to see how the loss is changing. The average shows the trend very well. On the contrary, the accurate and sharp loss plot looks like as if it conveys no information, especially discriminator loss. So, i used a window size of 1000 for discriminator and 100 for generator to better capture loss trends.
 
 ### Step 6. Initializing The Model
 
