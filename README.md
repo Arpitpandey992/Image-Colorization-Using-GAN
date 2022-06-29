@@ -106,17 +106,17 @@ The dataset is defined in the following directory structure:
 
 ## Dependencies
 
-|   **Name**   |   **pip install Command**   |
-| :----------: | :-------------------------: |
-|    Numpy     |     `pip install numpy`     |
-|  Matplotlib  |  `pip install matplotlib`   |
-|    Torch     |     `pip install torch`     |
-| Torchvision  |  `pip install torchvision`  |
-|     Glob     |     `pip install glob2`     |
-|     PIL      |    `pip install Pillow`     |
-|   Skimage    | `pip install scikit-image`  |
-|     tqdm     |     `pip install tqdm`      |
-|    fastai    |    `pip install fastai`     |
+| **Name**     | **pip install Command**     |
+|--------------|-----------------------------|
+| Numpy        | `pip install numpy`         |
+| Matplotlib   | `pip install matplotlib`    |
+| Torch        | `pip install torch`         |
+| Torchvision  | `pip install torchvision`   |
+| Glob         | `pip install glob2`         |
+| PIL          | `pip install Pillow`        |
+| Skimage      | `pip install scikit-image`  |
+| tqdm         | `pip install tqdm`          |
+| fastai       | `pip install fastai`        |
 | TorchSummary | `pip install torch-summary` |
 
 ## Steps Followed
