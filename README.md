@@ -21,9 +21,13 @@ VLG Summer Open Project Submission 2022
   - [Step 8. Visualizing Loss Trajectory](#step-8-visualizing-loss-trajectory)
     - [Generator Loss:](#generator-loss)
     - [Discriminator Loss:](#discriminator-loss)
+    - [Average Generator Loss (Window size of 100):](#average-generator-loss-window-size-of-100)
+    - [Average Discriminator Loss (Window size of 1000):](#average-discriminator-loss-window-size-of-1000)
   - [Step 9. Visualizing Predictions](#step-9-visualizing-predictions)
+    - [Predictions on Training Data:](#predictions-on-training-data)
 - [Conclusion](#conclusion)
 - [How to replicate on your device](#how-to-replicate-on-your-device)
+- [References](#references)
 
 ## Overview of Project:
 
@@ -76,6 +80,8 @@ Where, x is the label for input data. For B/W to color task, x is the L channel 
 
 ## Data Description:
 Since the task is simply colorization of black and white images, we don't need any specific labelled data. This allows us to use any image dataset containing various scenes for training. So i am using the COCO image dataset which contains various different images describing different objects and scenes. i used 8000 images for training and 2000 for testing.
+
+The data is fetched using `fastai` Module. It makes it very easy to fetch and divide the dataset into train and test sets.
 
 The dataset is defined in the following directory structure:
 <pre>
@@ -274,7 +280,7 @@ Used for showing and saving some samples while training the model. it takes a ra
 Used to plot the loss values w.r.t iterations performed during the training phase.
 
 * `VisualizeAvgLoss()`\
-Used to plot average loss values using sliding window technique. This allows us to see how the average loss is changing.The average shows the trend very well. The accurate, sharp loss plot looks like as if it contains no information, especially discriminator loss. So, i used a window size of 100 for discriminator and 1000 for generator to better capture loss trends.
+Used to plot average loss values using sliding window technique. This allows us to see how the average loss is changing.The average shows the trend very well. The accurate, sharp loss plot looks like as if it contains no information, especially discriminator loss. So, i used a window size of 1000 for discriminator and 100 for generator to better capture loss trends.
 
 ### Step 6. Initializing The Model
 
@@ -290,25 +296,33 @@ The training process was as follows:
 * After that, the model was trained till ~350 epochs by taking breaks in between.
 * As the loss was saturating at this point, i introduced random horizontal flips in the input datasets. This point is characterized by the sudden increase in generator loss near ~1,50,000 Iterations and sudden decrease in discriminator loss.
 * Now, the model was trained till ~950 epochs.
-* The loss nearly saturated again but this time, the average generator loss was higher than the loss observed at 350 epochs, when i started training again with random horizontal flips. It might possibly go down if i train further however.
+* The loss nearly saturated again but this time, the average generator loss was higher than the loss observed at 350 epochs, when i started training again with random horizontal flips. It might possibly go down if i train further however. The results however seemed very similar to when the model was trained till 350 epochs.
 
 
 ### Step 8. Visualizing Loss Trajectory
 
 #### Generator Loss:
-After 350 Epochs:
-![](ReadmeData/Losses/Generator_Loss_After_Epoch_350.png)
-After 800 Epochs:
-![](ReadmeData/Losses/Generator_Loss_After_Epoch_650.png)
+![](ReadmeData/Losses/Generator_Loss_After_Epoch_950_15%2003%2016.png)
 #### Discriminator Loss:
-After 350 Epochs:
-![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_350.png)
-After 800 Epochs:
-![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_650.png)
+![](ReadmeData/Losses/Discriminator_Loss_After_Epoch_950_15%2000%2007.png)
+
+As we can see, it is very difficult to get any meaningful information out of these accurate graphs. So, it is better to look at average loss values to better understand the trends.
+
+#### Average Generator Loss (Window size of 100):
+![](ReadmeData/Losses/Generator_Average_Loss_After_Epoch_950_WindowSize_100_15%2003%2014.png)
+#### Average Discriminator Loss (Window size of 1000):
+![](ReadmeData/Losses/Discriminator_Average_Loss_After_Epoch_950_WindowSize_1000_15%2001%2018.png)
+
+
 ### Step 9. Visualizing Predictions
+
+#### Predictions on Training Data:
+
+
 
 ## Conclusion
 From the average loss graphs, we can clearly see how the generator loss reduces, slowly saturating (before 350 epochs), Similarly, the discriminator loss increases alongside, hence proving that the model was indeed learning from the learning data slowly.
+After applying horizontal flips, the generator loss abruptly increases but it again slowly saturates, but this time, the final saturated loss value is relatively higher. This is expected as the model is easily able to overfit on training data if the data is kept the same throughout multiple train sessions.
 
 From the results, we can see that the model is able to give very close predictions when predicting on training data, but the predictions are nowhere near perfect when using validation data. Hence, this model surely works, but it leaves a lot to be desired. 
 
@@ -324,3 +338,5 @@ Make sure that folder paths for retrieving and storing checkpoints are set corre
 Pretrained Weights could be found in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params>My Model Checkpoints</a>.\
 The checkpoints till epoch 350 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/4>Version 4</a>\
 The checkpoints till epoch 950 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/8>Version 8</a>
+
+## References
