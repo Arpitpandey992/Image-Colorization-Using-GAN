@@ -8,7 +8,7 @@
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 [![Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/arpitpandey992/image-colorization-gan)
 
-# Image-Colorization-Using-GAN <!-- omit in toc -->
+# Image Colorization Using Conditional GANs <!-- omit in toc -->
 
 VLG Summer Open Project Submission 2022
 
