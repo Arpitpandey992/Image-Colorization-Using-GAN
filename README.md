@@ -1,6 +1,11 @@
 <p align="center"><img width="100%" src="ReadmeData/FrontLogo.svg" /></p>
 
 --------------------------------------------------------------------------------
+[![Python}](https://img.shields.io/badge/Python-3776AB.svg?style=for-the-badge&logo=Python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
+[![Jupyter](https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white)](https://jupyter.org/try)
+
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 # Image-Colorization-Using-GAN <!-- omit in toc -->
 
@@ -33,7 +38,6 @@ VLG Summer Open Project Submission 2022
     - [Predictions on Validation Set:](#predictions-on-validation-set)
 - [Conclusion](#conclusion)
 - [How to replicate on your device](#how-to-replicate-on-your-device)
-- [References](#references)
 
 ## Overview of Project:
 
@@ -361,5 +365,3 @@ Make sure that folder paths for retrieving and storing checkpoints are set corre
 Pretrained Weights could be found in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params>My Model Checkpoints</a>.\
 The checkpoints till epoch 350 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/4>Version 4</a>\
 The checkpoints till epoch 950 are in <a href=https://www.kaggle.com/datasets/arpitpandey992/model-params/versions/8>Version 8</a>
-
-## References
