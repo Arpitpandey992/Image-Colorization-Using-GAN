@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 [![Python}](https://img.shields.io/badge/Python-3776AB.svg?style=for-the-badge&logo=Python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org/)
 [![Jupyter](https://img.shields.io/badge/Jupyter-F37626.svg?style=for-the-badge&logo=Jupyter&logoColor=white)](https://jupyter.org/try)
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
@@ -107,7 +107,7 @@ The dataset is defined in the following directory structure:
 ## Dependencies
 
 | **Name**     | **pip install Command**     |
-|--------------|-----------------------------|
+| ------------ | --------------------------- |
 | Numpy        | `pip install numpy`         |
 | Matplotlib   | `pip install matplotlib`    |
 | Torch        | `pip install torch`         |
